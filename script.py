@@ -2,13 +2,17 @@ import os
 import re
 import subprocess
 
-def find_video_file(input_folder):
-    for file in os.listdir(input_folder):
+def find_video_file():
+    for file in os.listdir(os.getcwd()):  # Look in the same directory as the script
         if file.lower().endswith(('.mp4', '.mkv', '.mov', '.avi')):
-            return os.path.join(input_folder, file)
+            return os.path.join(os.getcwd(), file)
     return None
 
-def read_stream_details(txt_file):
+def read_stream_details():
+    txt_file = os.path.join(os.getcwd(), "stream_info.txt")
+    if not os.path.exists(txt_file):
+        return None, None
+    
     with open(txt_file, 'r') as file:
         content = file.read()
         stream_key_match = re.search(r"Stream key:\s*(\S+)", content)
@@ -29,19 +33,12 @@ def start_stream(video_file, stream_url, stream_key):
     subprocess.run(command)
 
 def main():
-    input_folder = os.path.join(os.getcwd(), "Input")
-    txt_file = os.path.join(input_folder, "stream_info.txt")
-    
-    if not os.path.exists(input_folder):
-        print("Error: 'Input' folder not found!")
-        return
-    
-    video_file = find_video_file(input_folder)
+    video_file = find_video_file()
     if not video_file:
-        print("Error: No video file found in 'Input' folder!")
+        print("Error: No video file found in the current directory!")
         return
     
-    stream_url, stream_key = read_stream_details(txt_file)
+    stream_url, stream_key = read_stream_details()
     if not stream_url or not stream_key:
         print("Error: Stream key or URL not found in stream_info.txt!")
         return
