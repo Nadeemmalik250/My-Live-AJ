@@ -1,2 +1,2 @@
-Stream key: 4g15-u6t1-5t7h-1vu9-b840  
+Stream key: hrr4-4ems-2v8f-jg3b-camb
 Stream URL: rtmp://a.rtmp.youtube.com/live2
