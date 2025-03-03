@@ -9,16 +9,19 @@ def read_stream_info():
         stream_url = lines[1].split(": ")[1].strip()
     return stream_key, stream_url
 
+import subprocess
+
 def start_stream(video_file, stream_url, stream_key):
-    """Starts the FFmpeg live stream"""
+    ffmpeg_path = "/app/vendor/ffmpeg/ffmpeg"  # Full path to FFmpeg
     command = [
-        "ffmpeg", "-re", "-stream_loop", "-1",
-        "-i", video_file, "-c:v", "libx264", "-preset", "veryfast", "-b:v", "4500k",
-        "-maxrate", "4500k", "-bufsize", "6000k", "-c:a", "aac", "-b:a", "128k",
-        "-f", "flv", f"{stream_url}/{stream_key}"
+        ffmpeg_path, "-re", "-stream_loop", "-1", "-i", video_file, "-c:v", "libx264",
+        "-preset", "veryfast", "-b:v", "2500k", "-maxrate", "2500k", "-bufsize", "5000k",
+        "-pix_fmt", "yuv420p", "-g", "50", "-c:a", "aac", "-b:a", "128k", "-f", "flv",
+        f"{stream_url}/{stream_key}"
     ]
-    print(f"Streaming {video_file} to {stream_url} with key {stream_key}...")
     subprocess.run(command)
+
+
 
 def main():
     """Main function to start streaming"""
